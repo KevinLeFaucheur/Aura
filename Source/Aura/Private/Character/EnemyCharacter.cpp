@@ -3,11 +3,18 @@
 
 #include "Character/EnemyCharacter.h"
 #include "DrawDebugHelpers.h"
+#include "AbilitySystem/ARPGAbilitySystemComponent.h"
+#include "AbilitySystem/ARPGAttributeSet.h"
 #include "Aura/Aura.h"
 
 AEnemyCharacter::AEnemyCharacter()
 {
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UARPGAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+
+	AttributeSet = CreateDefaultSubobject<UARPGAttributeSet>("AttributeSet");
 }
 
 void AEnemyCharacter::HighlightActor()
