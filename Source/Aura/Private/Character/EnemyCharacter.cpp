@@ -13,6 +13,7 @@ AEnemyCharacter::AEnemyCharacter()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UARPGAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	AttributeSet = CreateDefaultSubobject<UARPGAttributeSet>("AttributeSet");
 }
