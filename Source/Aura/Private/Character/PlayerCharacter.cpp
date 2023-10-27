@@ -5,7 +5,9 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/CharacterPlayerController.h"
 #include "Player/CharacterPlayerState.h"
+#include "UI/HUD/CharacterHUD.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -26,6 +28,14 @@ void APlayerCharacter::InitAbilityActorInfo()
 	CharacterPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(CharacterPlayerState, this);
 	AbilitySystemComponent = CharacterPlayerState->GetAbilitySystemComponent();
 	AttributeSet = CharacterPlayerState->GetAttributeSet();
+
+	if (ACharacterPlayerController* CharacterPlayerController = Cast<ACharacterPlayerController>(GetController()))
+	{
+		if (ACharacterHUD* CharacterHUD = Cast<ACharacterHUD>(CharacterPlayerController->GetHUD()))
+		{
+			CharacterHUD->InitOverlay(CharacterPlayerController, CharacterPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
