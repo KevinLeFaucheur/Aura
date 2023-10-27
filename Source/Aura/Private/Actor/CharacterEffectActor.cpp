@@ -29,6 +29,7 @@ void ACharacterEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, 
 		const UARPGAttributeSet* ARPGAttributeSet = Cast<UARPGAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UARPGAttributeSet::StaticClass()));
 		UARPGAttributeSet* MutableARPGAttributeSet = const_cast<UARPGAttributeSet*>(ARPGAttributeSet);
 		MutableARPGAttributeSet->SetHealth(ARPGAttributeSet->GetHealth() + 25.f);
+		MutableARPGAttributeSet->SetMana(ARPGAttributeSet->GetMana() + 5.f);
 		Destroy();
 	}
 }

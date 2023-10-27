@@ -8,7 +8,7 @@ UARPGAttributeSet::UARPGAttributeSet()
 {
 	InitHealth(50.f);
 	InitMaxHealth(100.f);
-	InitMana(100.f);
+	InitMana(35.f);
 	InitMaxMana(100.f);
 }
 
