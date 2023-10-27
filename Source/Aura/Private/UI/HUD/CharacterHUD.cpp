@@ -12,6 +12,8 @@ UOverlayWidgetController* ACharacterHUD::GetOverlayWidgetController(
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WidgetControllerParams);
+		OverlayWidgetController->BindCallbacksToDependdencies();
+		
 		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
@@ -30,6 +32,7 @@ void ACharacterHUD::InitOverlay(APlayerController* InPlayerController, APlayerSt
 	UOverlayWidgetController* WidgetController = GetOverlayWidgetController(WidgetControllerParams);
 
 	OverlayWidget->SetWidgetController(WidgetController);
+	WidgetController->BroadcastInitialValues();
 	
 	Widget->AddToViewport();
 }
