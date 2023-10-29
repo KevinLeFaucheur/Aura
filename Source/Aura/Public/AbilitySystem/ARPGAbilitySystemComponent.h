@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "ARPGAbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /* Asset Tags */ );
+
 /**
  * 
  */
@@ -16,6 +18,8 @@ class AURA_API UARPGAbilitySystemComponent : public UAbilitySystemComponent
 
 public:
 	void AbilityActorInfoSet();
+
+	FEffectAssetTags EffectAssetTags;
 
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
