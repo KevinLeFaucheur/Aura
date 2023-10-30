@@ -38,6 +38,7 @@ void APlayerCharacter::InitAbilityActorInfo()
 			CharacterHUD->InitOverlay(CharacterPlayerController, CharacterPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
+	InitializePrimaryAttributes();
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
