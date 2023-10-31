@@ -38,7 +38,7 @@ void APlayerCharacter::InitAbilityActorInfo()
 			CharacterHUD->InitOverlay(CharacterPlayerController, CharacterPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
-	InitializePrimaryAttributes();
+	InitializeDefaultAttributes();
 }
 
 void APlayerCharacter::PossessedBy(AController* NewController)
@@ -55,4 +55,11 @@ void APlayerCharacter::OnRep_PlayerState()
 
 	// InitAbilityActorInfo for Client
 	InitAbilityActorInfo();
+}
+
+int32 APlayerCharacter::GetPlayerLevel()
+{
+	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->GetPlayerLevel();
 }
