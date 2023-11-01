@@ -12,7 +12,7 @@ UOverlayWidgetController* ACharacterHUD::GetOverlayWidgetController(
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WidgetControllerParams);
-		OverlayWidgetController->BindCallbacksToDependdencies();
+		OverlayWidgetController->BindCallbacksToDependencies();
 		
 		return OverlayWidgetController;
 	}

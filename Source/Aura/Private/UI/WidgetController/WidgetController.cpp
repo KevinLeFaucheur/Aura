@@ -15,6 +15,6 @@ void UWidgetController::BroadcastInitialValues()
 {
 }
 
-void UWidgetController::BindCallbacksToDependdencies()
+void UWidgetController::BindCallbacksToDependencies()
 {
 }

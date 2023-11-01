@@ -16,7 +16,7 @@ void UOverlayWidgetController::BroadcastInitialValues()
 	OnMaxManaChanged.Broadcast(ARPGAttributeSet->GetMaxMana());
 }
 
-void UOverlayWidgetController::BindCallbacksToDependdencies()
+void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UARPGAttributeSet* ARPGAttributeSet = CastChecked<UARPGAttributeSet>(AttributeSet);
 	

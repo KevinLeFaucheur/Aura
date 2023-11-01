@@ -38,7 +38,7 @@ class AURA_API UOverlayWidgetController : public UWidgetController
 
 public:
 	virtual void BroadcastInitialValues() override;
-	virtual void BindCallbacksToDependdencies() override;
+	virtual void BindCallbacksToDependencies() override;
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attributes")
 	FOnAttributeChangedSignature OnHealthChanged;
