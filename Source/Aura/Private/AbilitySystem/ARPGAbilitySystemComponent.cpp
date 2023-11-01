@@ -14,7 +14,7 @@ void UARPGAbilitySystemComponent::AbilityActorInfoSet()
 		-1,
 		15.f,
 		FColor::Cyan,
-		FString::Printf(TEXT("Tag: %s"), *GameplayTags.Attribute_Secondary_Armor.ToString()));
+		FString::Printf(TEXT("Tag: %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
 }
 
 void UARPGAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
