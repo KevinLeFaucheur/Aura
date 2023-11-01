@@ -23,3 +23,20 @@ UOverlayWidgetController* UARPGAbilitySystemLibrary::GetOverlayWidgetController(
 	}
 	return nullptr;
 }
+
+UAttributeMenuWidgetController* UARPGAbilitySystemLibrary::GetAttributeMenuWidgetController(
+	const UObject* WorldContextObject)
+{
+	if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	{
+		if (ACharacterHUD* CharacterHUD = Cast<ACharacterHUD>(PlayerController->GetHUD()))
+		{
+			ACharacterPlayerState* PlayerState = PlayerController->GetPlayerState<ACharacterPlayerState>();
+			UAbilitySystemComponent* ASC = PlayerState->GetAbilitySystemComponent();
+			UAttributeSet* AS = PlayerState->GetAttributeSet();
+			const FWidgetControllerParams WidgetControllerParams(PlayerController, PlayerState, ASC, AS);
+			return CharacterHUD->GetAttributeMenuWidgetController(WidgetControllerParams);
+		}
+	}
+	return nullptr;
+}

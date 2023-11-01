@@ -3,6 +3,7 @@
 
 #include "UI/HUD/CharacterHUD.h"
 #include "UI/Widget/CharacterUserWidget.h"
+#include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 
 UOverlayWidgetController* ACharacterHUD::GetOverlayWidgetController(
@@ -13,14 +14,24 @@ UOverlayWidgetController* ACharacterHUD::GetOverlayWidgetController(
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WidgetControllerParams);
 		OverlayWidgetController->BindCallbacksToDependencies();
-		
-		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
 }
 
+UAttributeMenuWidgetController* ACharacterHUD::GetAttributeMenuWidgetController(
+	const FWidgetControllerParams& WidgetControllerParams)
+{
+	if(AttributeMenuWidgetController == nullptr)
+	{
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController->SetWidgetControllerParams(WidgetControllerParams);
+		AttributeMenuWidgetController->BindCallbacksToDependencies();
+	}
+	return AttributeMenuWidgetController;
+}
+
 void ACharacterHUD::InitOverlay(APlayerController* InPlayerController, APlayerState* InPlayerstate,
-	UAbilitySystemComponent* InAbilitySystemComponent, UAttributeSet* InAttributeSet)
+                                UAbilitySystemComponent* InAbilitySystemComponent, UAttributeSet* InAttributeSet)
 {
 	checkf(OverlayWidgetClass, TEXT("Overlay Widget Class uninitialized in BP_CharacterHUD"));
 	checkf(OverlayWidgetControllerClass, TEXT("Overlay Widget Controller Class uninitialized in BP_CharacterHUD"));
