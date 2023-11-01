@@ -5,28 +5,36 @@
 
 #include "AbilitySystem/ARPGAttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
-#include "ARPGGameplayTags.h"
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
-	
+	UARPGAttributeSet* AS = CastChecked<UARPGAttributeSet>(AttributeSet);
+	check(AttributeInfo);	
+	for (auto& Pair : AS->TagsToAttributes)
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value).AddLambda(
+        	[this, Pair](const FOnAttributeChangeData& Data)
+        	{
+        		BroadcastAttributeInfo(Pair.Key, Pair.Value);
+        	}
+        );
+	}
+
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
 	UARPGAttributeSet* AS = CastChecked<UARPGAttributeSet>(AttributeSet);
-
-	check(AttributeInfo);
-
-	/*FARPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(FARPGGameplayTags::Get().Attributes_Primary_Strength);
-	Info.AttributeValue = AS->GetStrength();
-	AttributeInfoDelegate.Broadcast(Info);*/
-	
+	check(AttributeInfo);	
 	for (auto& Pair : AS->TagsToAttributes)
 	{
-		FARPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-		//Info.AttributeValue = Pair.Value().GetNumericValue(AS);
-		Info.AttributeValue = Pair.Value.GetNumericValue(AS);
-		AttributeInfoDelegate.Broadcast(Info);
+		BroadcastAttributeInfo(Pair.Key, Pair.Value);
 	}
+}
+
+void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag, const FGameplayAttribute& Attribute) const
+{
+	FARPGAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
+	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);
+	AttributeInfoDelegate.Broadcast(Info);
 }
