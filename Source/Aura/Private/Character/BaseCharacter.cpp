@@ -3,6 +3,7 @@
 
 #include "Character/BaseCharacter.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/ARPGAbilitySystemComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -38,6 +39,15 @@ void ABaseCharacter::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void ABaseCharacter::AddCharacterAbilities()
+{
+	UARPGAbilitySystemComponent* ARPGASC = CastChecked<UARPGAbilitySystemComponent>(AbilitySystemComponent);
+	
+	if(!HasAuthority()) return;
+
+	ARPGASC->AddCharacterAbilities(StartupAbilities);
 }
 
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
