@@ -8,7 +8,7 @@
 
 void UARPGAbilitySystemComponent::AbilityActorInfoSet()
 {
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UARPGAbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UARPGAbilitySystemComponent::ClientEffectApplied);
 
 	const  FARPGGameplayTags& GameplayTags = FARPGGameplayTags::Get();
 	GEngine->AddOnScreenDebugMessage(
@@ -18,7 +18,7 @@ void UARPGAbilitySystemComponent::AbilityActorInfoSet()
 		FString::Printf(TEXT("Tag: %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
 }
 
-void UARPGAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
+void UARPGAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
                                                 const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {	
 	FGameplayTagContainer TagContainer;
