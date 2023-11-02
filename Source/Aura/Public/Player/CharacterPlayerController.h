@@ -13,6 +13,7 @@ class UInputAction;
 struct FInputActionValue;
 class IEnemyInterface;
 class UARPGAbilitySystemComponent;
+class USplineComponent;
 /**
  * 
  */
@@ -53,4 +54,22 @@ private:
 	TObjectPtr<UARPGAbilitySystemComponent> ARPGAbilitySystemComponent;
 
 	UARPGAbilitySystemComponent* GetASC();
+
+	/*
+	 * Click To Move
+	 */
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ShortPressThreshold = 0.5f;
+
+	bool bAutoRunning = false;
+	bool bTargeting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
 };
