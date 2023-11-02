@@ -38,6 +38,7 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void Move(const FInputActionValue& InputActionValue);
+	void AutoRun();
 	void CursorTrace();
 
 	TObjectPtr<IEnemyInterface> LastActor;
