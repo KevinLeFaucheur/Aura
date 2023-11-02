@@ -2,7 +2,10 @@
 
 
 #include "Player/CharacterPlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/ARPGAbilitySystemComponent.h"
 #include "Input/ARPGInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Interaction/EnemyInterface.h"
@@ -111,10 +114,21 @@ void ACharacterPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 
 void ACharacterPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, *InputTag.ToString());
+	if(GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagHeld(InputTag);
 }
 
 void ACharacterPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Green, *InputTag.ToString());
+	if(GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+UARPGAbilitySystemComponent* ACharacterPlayerController::GetASC()
+{
+	if(ARPGAbilitySystemComponent == nullptr)
+	{
+		ARPGAbilitySystemComponent = Cast<UARPGAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return ARPGAbilitySystemComponent;
 }
