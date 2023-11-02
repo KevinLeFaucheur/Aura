@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
-#include "InputConfig.generated.h"
+#include "ARPGInputConfig.generated.h"
 
 USTRUCT(BlueprintType)
 struct FARPGInputAction
@@ -24,7 +24,7 @@ struct FARPGInputAction
  * 
  */
 UCLASS()
-class AURA_API UInputConfig : public UDataAsset
+class AURA_API UARPGInputConfig : public UDataAsset
 {
 	GENERATED_BODY()
 

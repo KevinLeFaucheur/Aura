@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameplayTagContainer.h"
 #include "CharacterPlayerController.generated.h"
 
-
+class UARPGInputConfig;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -39,4 +40,11 @@ private:
 
 	TObjectPtr<IEnemyInterface> LastActor;
 	TObjectPtr<IEnemyInterface> ThisActor;
+
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UARPGInputConfig> InputConfig;
 };

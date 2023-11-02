@@ -3,7 +3,7 @@
 
 #include "Player/CharacterPlayerController.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/ARPGInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Interaction/EnemyInterface.h"
 
@@ -83,9 +83,10 @@ void ACharacterPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	UARPGInputComponent* ARPGInputComponent = CastChecked<UARPGInputComponent>(InputComponent);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterPlayerController::Move);
+	ARPGInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterPlayerController::Move);
+	ARPGInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void ACharacterPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -103,3 +104,17 @@ void ACharacterPlayerController::Move(const FInputActionValue& InputActionValue)
 	}
 }
 
+void ACharacterPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, *InputTag.ToString());
+}
+
+void ACharacterPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, *InputTag.ToString());
+}
+
+void ACharacterPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Green, *InputTag.ToString());
+}

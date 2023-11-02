@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EnhancedInputComponent.h"
-#include "InputConfig.h"
+#include "ARPGInputConfig.h"
 #include "ARPGInputComponent.generated.h"
 
 /**
@@ -17,16 +17,16 @@ class AURA_API UARPGInputComponent : public UEnhancedInputComponent
 	
 public:
 	template<class UserClass, typename  PressedFuncType, typename  ReleasedFuncType, typename HeldFuncType>
-	void BindAbilityActions(const UInputConfig& InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, HeldFuncType HeldFunc);
+	void BindAbilityActions(const UARPGInputConfig* InputConfig, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, HeldFuncType HeldFunc);
 };
 
 template <class UserClass, typename PressedFuncType, typename ReleasedFuncType, typename HeldFuncType>
-void UARPGInputComponent::BindAbilityActions(const UInputConfig& InputConfig, UserClass* Object,
+void UARPGInputComponent::BindAbilityActions(const UARPGInputConfig* InputConfig, UserClass* Object,
 	PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, HeldFuncType HeldFunc)
 {
 	check(InputConfig);
 
-	for (const FARPGInputAction& Action : InputConfig.AbilityInputActions)
+	for (const FARPGInputAction& Action : InputConfig->AbilityInputActions)
 	{
 		if(Action.InputAction && Action.InputTag.IsValid())
 		{

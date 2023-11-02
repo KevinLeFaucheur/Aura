@@ -1,9 +1,9 @@
 
 
 
-#include "Input/InputConfig.h"
+#include <Input/ARPGInputConfig.h>
 
-const UInputAction* UInputConfig::FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
+const UInputAction* UARPGInputConfig::FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound) const
 {
 	for (const FARPGInputAction& Action : AbilityInputActions)
 	{
