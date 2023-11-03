@@ -3,6 +3,8 @@
 
 #include "ARPGAssetManager.h"
 #include "ARPGGameplayTags.h"
+#include "AbilitySystem/ARPGAbilitySystemComponent.h"
+#include "AbilitySystemGlobals.h"
 
 UARPGAssetManager& UARPGAssetManager::Get()
 {
@@ -16,4 +18,7 @@ void UARPGAssetManager::StartInitialLoading()
 	Super::StartInitialLoading();
 
 	FARPGGameplayTags::InitializeNativeGameplayTags();
+
+	// This is required to use Target Data
+	UAbilitySystemGlobals::Get().InitGlobalData();
 }
