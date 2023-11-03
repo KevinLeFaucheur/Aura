@@ -28,6 +28,9 @@ void AEnemyCharacter::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UARPGAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	// TODO: 
+	InitializeDefaultAttributes();
 }
 
 void AEnemyCharacter::HighlightActor()
