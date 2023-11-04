@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Actor/Projectile.h"
 #include "Interaction/CombatInterface.h"
+#include "ARPGGameplayTags.h"
 
 
 void UProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -43,6 +44,9 @@ void UProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 
 		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+
+		FARPGGameplayTags GameplayTags = FARPGGameplayTags::Get();
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, 50.f);
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		
 		Projectile->FinishSpawning(SpawnTransform);
