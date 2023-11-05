@@ -9,6 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "ARPGGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/CharacterPlayerController.h"
 
 UARPGAttributeSet::UARPGAttributeSet()
 {
@@ -150,9 +152,20 @@ void UARPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
                 TagContainer.AddTag(FARPGGameplayTags::Get().Effects_HitReact);
                 Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+			ShowFloatingText(Props, LocalIncomingDamage);
 		}
 	}
-	
+}
+
+void UARPGAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if(Props.SourceCharacter != Props.TargetCharacter)
+	{
+		if (ACharacterPlayerController* PC = Cast<ACharacterPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+		}
+	}
 }
 
 void UARPGAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const

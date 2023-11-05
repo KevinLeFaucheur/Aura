@@ -9,10 +9,13 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "AbilitySystem/ARPGAbilitySystemComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/SplineComponent.h"
 #include "Input/ARPGInputComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "GameFramework/Character.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 ACharacterPlayerController::ACharacterPlayerController()
 {
@@ -27,6 +30,18 @@ void ACharacterPlayerController::PlayerTick(float DeltaTime)
 
 	CursorTrace();
 	AutoRun();
+}
+
+void ACharacterPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	if(IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageAmount);
+	}
 }
 
 void ACharacterPlayerController::AutoRun()

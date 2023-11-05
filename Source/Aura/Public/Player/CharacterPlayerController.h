@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "CharacterPlayerController.generated.h"
 
+class UDamageTextComponent;
 class UARPGInputConfig;
 class UInputMappingContext;
 class UInputAction;
@@ -25,6 +26,9 @@ class AURA_API ACharacterPlayerController : public APlayerController
 public:
 	ACharacterPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 	
 protected:
 	virtual void BeginPlay() override;;
@@ -63,6 +67,9 @@ private:
 	TObjectPtr<UARPGAbilitySystemComponent> ARPGAbilitySystemComponent;
 
 	UARPGAbilitySystemComponent* GetASC();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 
 	/*
 	 * Click To Move
