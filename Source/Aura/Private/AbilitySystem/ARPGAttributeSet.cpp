@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "ARPGGameplayTags.h"
+#include "Interaction/CombatInterface.h"
 
 UARPGAttributeSet::UARPGAttributeSet()
 {
@@ -135,11 +136,19 @@ void UARPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
 			const bool bFatal = NewHealth <= 0.f;
-			if(!bFatal)
+			if(bFatal)
+			{
+				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
+				if(CombatInterface)
+				{
+					CombatInterface->DIe();
+				}
+			}
+			else
 			{
 				FGameplayTagContainer TagContainer;
-				TagContainer.AddTag(FARPGGameplayTags::Get().Effects_HitReact);
-				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+                TagContainer.AddTag(FARPGGameplayTags::Get().Effects_HitReact);
+                Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
 		}
 	}
