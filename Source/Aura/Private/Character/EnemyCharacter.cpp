@@ -32,7 +32,8 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-
+	UARPGAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+	
 	if (UCharacterUserWidget* EnemyUserWidget = Cast<UCharacterUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		EnemyUserWidget->SetWidgetController(this);
