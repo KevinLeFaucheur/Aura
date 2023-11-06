@@ -3,14 +3,17 @@
 
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 #include "AbilitySystemComponent.h"
+#include "ARPGGameplayTags.h"
 #include "AbilitySystem/ARPGAttributeSet.h"
 
 struct ARPGDamageStatics
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockChance);
 	ARPGDamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UARPGAttributeSet, Armor, Target, false);		
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UARPGAttributeSet, BlockChance, Target, false);		
 	}
 };
 
@@ -23,6 +26,7 @@ static const ARPGDamageStatics& DamageStatics()
 UExecCalc_Damage::UExecCalc_Damage()
 {
 	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
+	RelevantAttributesToCapture.Add(DamageStatics().BlockChanceDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -41,12 +45,21 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	FAggregatorEvaluateParameters EvaluationParameters;
 	EvaluationParameters.SourceTags = SourceTags;
 	EvaluationParameters.TargetTags = TargetTags;
-	float Armor = 0.f;
-	
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, Armor);
-	Armor = FMath::Max<float>(0.f, Armor);
-	++Armor;
 
-	const FGameplayModifierEvaluatedData EvaluatedData(DamageStatics().ArmorProperty, EGameplayModOp::Additive, Armor);
+	/*
+	 * Get Damage Set By Caller Magnitude
+	 */
+	float Damage = Spec.GetSetByCallerMagnitude(FARPGGameplayTags::Get().Damage);
+	
+	// Capture BlockChance on Target and determine if there was a successful Block
+	// If successful block, damage is halved	/*float Armor = 0.f;
+	float TargetBlockChance = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef, EvaluationParameters, TargetBlockChance);
+	TargetBlockChance = FMath::Max<float>(0.f, TargetBlockChance);
+	
+	const bool bBlocked = FMath::RandRange(1, 100) < TargetBlockChance;
+	if(bBlocked) Damage *= 0.5f;
+
+	const FGameplayModifierEvaluatedData EvaluatedData(UARPGAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }
