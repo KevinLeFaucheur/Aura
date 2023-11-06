@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "ARPGGameplayTags.h"
+#include "AbilitySystem/ARPGAbilitySystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/CharacterPlayerController.h"
@@ -152,18 +153,20 @@ void UARPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
                 TagContainer.AddTag(FARPGGameplayTags::Get().Effects_HitReact);
                 Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			ShowFloatingText(Props, LocalIncomingDamage);
+			const bool bBlockedHit = UARPGAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCriticaldHit = UARPGAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bBlockedHit, bCriticaldHit);
 		}
 	}
 }
 
-void UARPGAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UARPGAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHi) const
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{
 		if (ACharacterPlayerController* PC = Cast<ACharacterPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bBlockedHit, bCriticalHi);
 		}
 	}
 }
