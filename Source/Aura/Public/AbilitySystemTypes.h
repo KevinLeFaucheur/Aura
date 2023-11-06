@@ -18,7 +18,20 @@ public:
 	/** Returns the actual struct used for serialization, subclasses must override this! */
 	virtual UScriptStruct* GetScriptStruct() const
 	{
-		return FGameplayEffectContext::StaticStruct();
+		return StaticStruct();
+	}
+	
+	/** Creates a copy of this context, used to duplicate for later modifications */
+	virtual FARPGGameplayEffectContext* Duplicate() const
+	{
+		FARPGGameplayEffectContext* NewContext = new FARPGGameplayEffectContext();
+		*NewContext = *this;
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		return NewContext;
 	}
 	
 	/** Custom serialization, subclasses must override this */
@@ -30,4 +43,14 @@ protected:
 	
 	UPROPERTY()
 	bool bIsCriticalHit = false;
+};
+
+template<>
+struct TStructOpsTypeTraits<FARPGGameplayEffectContext> : public TStructOpsTypeTraitsBase2<FARPGGameplayEffectContext>
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true
+	};
 };
