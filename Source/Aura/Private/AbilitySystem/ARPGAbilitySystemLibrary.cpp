@@ -46,10 +46,11 @@ void UARPGAbilitySystemLibrary::InitializeDefaultAttributes(const UObject* World
 {
 	AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if(ARPGGameMode == nullptr) return;
-
+	
 	AActor* AvatarActor = ASC->GetAvatarActor();
 
 	UCharacterClassInfo* CharacterClassInfo = ARPGGameMode->CharacterClassInfo;
+	//UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 
 	 FGameplayEffectContextHandle PrimaryAttributesContextHandle =  ASC->MakeEffectContext();
@@ -72,11 +73,19 @@ void UARPGAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 {
 	AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if(ARPGGameMode == nullptr) return;
-
+	
 	UCharacterClassInfo* CharacterClassInfo = ARPGGameMode->CharacterClassInfo;
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1.f);
 		ASC->GiveAbility(AbilitySpec);
 	}
+}
+
+UCharacterClassInfo* UARPGAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if(ARPGGameMode == nullptr) return nullptr;
+
+	return ARPGGameMode->CharacterClassInfo;
 }
