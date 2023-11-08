@@ -53,7 +53,7 @@ void AEnemyCharacter::BeginPlay()
 	InitAbilityActorInfo();
 	if(HasAuthority())
 	{
-		UARPGAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+		UARPGAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 	
 	if (UCharacterUserWidget* EnemyUserWidget = Cast<UCharacterUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -118,6 +118,16 @@ void AEnemyCharacter::UnhighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AEnemyCharacter::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AEnemyCharacter::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
 }
 
 int32 AEnemyCharacter::GetPlayerLevel()
