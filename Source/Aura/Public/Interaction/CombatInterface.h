@@ -31,4 +31,10 @@ public:
 	UAnimMontage* GetHitReactMontage();
 
 	virtual void DIe() = 0;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsDead() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	AActor* GetAvatar();
 };

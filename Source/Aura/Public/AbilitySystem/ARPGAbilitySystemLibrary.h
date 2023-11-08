@@ -46,4 +46,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
 	static  void SetIsCriticalHit(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
+
+	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayMechanics")
+	static  void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 };
