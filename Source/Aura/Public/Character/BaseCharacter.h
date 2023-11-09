@@ -8,6 +8,7 @@
 #include "Interaction/CombatInterface.h"
 #include "BaseCharacter.generated.h"
 
+class UNiagaraSystem;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -25,11 +26,12 @@ public:
 
 	//~ Combat Interface
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-	virtual void DIe() override;
+	virtual void Die() override;
 	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual  bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	//~ Combat Interface
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -38,11 +40,12 @@ public:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TArray<FTaggedMontage> AttackMontages;
 
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
-	UPROPERTY(EditAnywhere, Category="Combat")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY(EditAnywhere, Category="Combat")
@@ -91,7 +94,10 @@ protected:
 	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance; 
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UNiagaraSystem> BloodEffect;
 	
 private:
 	UPROPERTY(EditAnywhere, Category="Abilities")

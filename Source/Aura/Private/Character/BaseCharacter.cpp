@@ -28,7 +28,7 @@ UAnimMontage* ABaseCharacter::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
-void ABaseCharacter::DIe()
+void ABaseCharacter::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	MulticastHandleDeath();
@@ -138,4 +138,9 @@ AActor* ABaseCharacter::GetAvatar_Implementation()
 TArray<FTaggedMontage> ABaseCharacter::GetAttackMontages_Implementation()
 {
 	return AttackMontages;
+}
+
+UNiagaraSystem* ABaseCharacter::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
 }

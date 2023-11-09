@@ -138,8 +138,12 @@ int32 AEnemyCharacter::GetPlayerLevel()
 	return Level;
 }
 
-void AEnemyCharacter::DIe()
+void AEnemyCharacter::Die()
 {
 	SetLifeSpan(LifeSpan);
-	Super::DIe();
+	if(BaseAIController)
+	{
+		BaseAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"), true);
+	}
+	Super::Die();
 }

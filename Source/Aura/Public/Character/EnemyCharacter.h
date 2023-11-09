@@ -33,7 +33,7 @@ public:
 
 	//~ CombatInterface
 	virtual int32 GetPlayerLevel() override;
-	virtual void DIe() override;
+	virtual void Die() override;
 	//~ CombatInterface
 	
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);

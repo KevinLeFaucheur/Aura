@@ -157,7 +157,7 @@ void UARPGAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
 				if(CombatInterface)
 				{
-					CombatInterface->DIe();
+					CombatInterface->Die();
 				}
 			}
 			else
