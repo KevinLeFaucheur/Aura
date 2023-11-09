@@ -58,6 +58,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	FName RightHandSocketName;
 
+	UPROPERTY(EditAnywhere, Category="Combat")
+	FName TailSocketName;
+
 	bool bDead = false;
 
 	UPROPERTY()
@@ -99,6 +102,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraSystem> BloodEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<USoundBase> DeathSound;
 	
 private:
 	UPROPERTY(EditAnywhere, Category="Abilities")
