@@ -160,3 +160,8 @@ FTaggedMontage ABaseCharacter::GetTaggedMontageByTag_Implementation(const FGamep
 	}
 	return FTaggedMontage();
 }
+
+int32 ABaseCharacter::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
