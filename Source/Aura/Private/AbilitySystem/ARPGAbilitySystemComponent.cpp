@@ -5,6 +5,7 @@
 
 #include "ARPGGameplayTags.h"
 #include "AbilitySystem/Abilities/BaseGameplayAbility.h"
+#include "Aura/AuraLogChannels.h"
 
 void UARPGAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -41,6 +42,45 @@ void UARPGAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 	}
 	bStartupAbilitiesGiven = true;
 	AbilitiesGivenDelegate.Broadcast(this);
+}
+
+void UARPGAbilitySystemComponent::ForEachAbility(const FForEachAbility& Delegate)
+{
+	FScopedAbilityListLock ActiveScopeLock(*this);
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (!Delegate.ExecuteIfBound(AbilitySpec))
+		{
+			UE_LOG(LogARPG, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
+		}
+	}
+}
+
+FGameplayTag UARPGAbilitySystemComponent::GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	if(AbilitySpec.Ability)
+	{
+		for(FGameplayTag Tag : AbilitySpec.Ability.Get()->AbilityTags)
+		{
+			if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities"))))
+			{
+				return Tag;
+			}
+		}		
+	}
+	return FGameplayTag();
+}
+
+FGameplayTag UARPGAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for(FGameplayTag Tag : AbilitySpec.DynamicAbilityTags)
+	{
+		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag"))))
+		{
+			return Tag;
+		}
+	}
+	return FGameplayTag();
 }
 
 void UARPGAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)

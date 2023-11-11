@@ -8,6 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /* Asset Tags */ );
 DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven, UARPGAbilitySystemComponent*);
+DECLARE_DELEGATE_OneParam(FForEachAbility, const FGameplayAbilitySpec&);
 
 /**
  * 
@@ -25,6 +26,9 @@ public:
 
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 	bool bStartupAbilitiesGiven = false;
+	void ForEachAbility(const FForEachAbility& Delegate);
+	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);

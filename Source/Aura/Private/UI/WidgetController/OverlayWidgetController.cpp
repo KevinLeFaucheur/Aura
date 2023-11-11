@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/ARPGAbilitySystemComponent.h"
 #include "AbilitySystem/ARPGAttributeSet.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -69,4 +70,15 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(UARPGAbilitySystemCo
 {
 	//TODO: Get info about all given abilities and broadcast to widgets
 	if(!ARPGAbilitySystemComponent->bStartupAbilitiesGiven) return;
+
+	FForEachAbility BroadcastDelegate;
+	BroadcastDelegate.BindLambda(
+		[this, ARPGAbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
+		{
+			FBaseAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(ARPGAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
+			Info.InputTag = ARPGAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+			AbilityInfoDelegate.Broadcast(Info);
+		}
+	);
+	ARPGAbilitySystemComponent->ForEachAbility(BroadcastDelegate);
 }
