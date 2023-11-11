@@ -112,3 +112,14 @@ void UARPGAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 		}
 	}
 }
+
+void UARPGAbilitySystemComponent::OnRep_ActivateAbilities()
+{
+	Super::OnRep_ActivateAbilities();
+
+	if(!bStartupAbilitiesGiven)
+	{
+		bStartupAbilitiesGiven = true;
+		AbilitiesGivenDelegate.Broadcast(this);
+	}
+}
