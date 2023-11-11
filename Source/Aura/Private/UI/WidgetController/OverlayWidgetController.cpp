@@ -32,22 +32,41 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ARPGAttributeSet->GetMaxManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data) { OnMaxManaChanged.Broadcast(Data.NewValue); }
 	);
-	
-	Cast<UARPGAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[this](const FGameplayTagContainer& AssetTags)
-		{
-			for(const FGameplayTag& Tag : AssetTags)
-			{
-				// For example, Tage = Message.HealthPotion
-				//  "Message.HealthPotion".MatchesTag(Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
-				FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
 
-				if (Tag.MatchesTag(MessageTag))
+	if (UARPGAbilitySystemComponent* ARPGAbilitySystemComponent = Cast<UARPGAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		if(ARPGAbilitySystemComponent->bStartupAbilitiesGiven)
+		{
+			OnInitializeStartupAbilities(ARPGAbilitySystemComponent);
+		}
+		else
+		{
+			ARPGAbilitySystemComponent->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		ARPGAbilitySystemComponent->EffectAssetTags.AddLambda(
+			[this](const FGameplayTagContainer& AssetTags)
+			{
+				for(const FGameplayTag& Tag : AssetTags)
 				{
-					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-					OnMessageWidgetRowDelegate.Broadcast(*Row);	
+					// For example, Tage = Message.HealthPotion
+					//  "Message.HealthPotion".MatchesTag(Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
+					FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+
+					if (Tag.MatchesTag(MessageTag))
+					{
+						const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+						OnMessageWidgetRowDelegate.Broadcast(*Row);	
+					}
 				}
 			}
-		}
-	);
+		);
+	}
+	
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(UARPGAbilitySystemComponent* ARPGAbilitySystemComponent)
+{
+	//TODO: Get info about all given abilities and broadcast to widgets
+	if(!ARPGAbilitySystemComponent->bStartupAbilitiesGiven) return;
 }

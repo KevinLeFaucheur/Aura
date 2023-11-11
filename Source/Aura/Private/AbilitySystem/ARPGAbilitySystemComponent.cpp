@@ -39,6 +39,8 @@ void UARPGAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 			GiveAbility(AbilitySpec);
 		}
 	}
+	bStartupAbilitiesGiven = true;
+	AbilitiesGivenDelegate.Broadcast(this);
 }
 
 void UARPGAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)

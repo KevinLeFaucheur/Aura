@@ -8,6 +8,7 @@
 
 class UAbilityInfo;
 class UCharacterUserWidget;
+class UARPGAbilitySystemComponent;
 
 USTRUCT(BlueprintType)
 struct FUIWidgetRow : public FTableRowBase
@@ -26,6 +27,7 @@ struct FUIWidgetRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* MessageImage = nullptr;
 };
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowSignature,  FUIWidgetRow, Row);
 
@@ -63,6 +65,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
+
+	void OnInitializeStartupAbilities(UARPGAbilitySystemComponent* ARPGAbilitySystemComponent);
 
 	template<typename  T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
