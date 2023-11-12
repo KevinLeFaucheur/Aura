@@ -87,6 +87,7 @@ void ABaseCharacter::AddCharacterAbilities()
 	if(!HasAuthority()) return;
 
 	ARPGASC->AddCharacterAbilities(StartupAbilities);
+	ARPGASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void ABaseCharacter::Dissolve()
