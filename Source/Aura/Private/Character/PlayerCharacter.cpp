@@ -66,3 +66,10 @@ int32 APlayerCharacter::GetPlayerLevel()
 	check(CharacterPlayerState);
 	return CharacterPlayerState->GetPlayerLevel();
 }
+
+void APlayerCharacter::AddToXP_Implementation(int32 InXP)
+{
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	CharacterPlayerState->AddToXP(InXP);
+}
