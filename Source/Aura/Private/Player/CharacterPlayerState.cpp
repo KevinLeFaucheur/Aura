@@ -24,11 +24,41 @@ void ACharacterPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ACharacterPlayerState, Level);
+	DOREPLIFETIME(ACharacterPlayerState, XP);
 }
 
 void ACharacterPlayerState::OnRep_Level(int32 OldLevel)
 {
-	
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void ACharacterPlayerState::OnRep_XP(int32 InXP)
+{
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void ACharacterPlayerState::SetXP(int32 InXP)
+{
+	XP = InXP;
+	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void ACharacterPlayerState::SetLevel(int32 InLevel)
+{
+	Level = InLevel;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void ACharacterPlayerState::AddToLevel(int32 InLevel)
+{
+	Level += InLevel;
+	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void ACharacterPlayerState::AddToXP(int32 InXP)
+{
+	XP += InXP;
+	OnXPChangedDelegate.Broadcast(XP);
 }
 
 UAbilitySystemComponent* ACharacterPlayerState::GetAbilitySystemComponent() const
