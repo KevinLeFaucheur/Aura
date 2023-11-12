@@ -17,6 +17,9 @@ struct FBaseAbilityInfo
 
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayTag InputTag = FGameplayTag();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag CooldownTag = FGameplayTag();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<const UTexture2D> Icon = nullptr;
