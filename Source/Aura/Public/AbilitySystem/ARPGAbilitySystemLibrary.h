@@ -52,5 +52,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="ARPGAbilitySystemLibrary|GameplayMechanics")
 	static bool IsHostile(AActor* FirstActor, AActor* SecondActor);
+
+	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
 	
 };
