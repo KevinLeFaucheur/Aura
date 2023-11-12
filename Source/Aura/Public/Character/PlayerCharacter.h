@@ -21,11 +21,12 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 	//~ CombatInterface
-	virtual int32 GetPlayerLevel() override;
+	virtual int32 GetPlayerLevel_Implementation() override;
 	//~ CombatInterface
 
 	//~ IPlayerInterface
 	virtual void AddToXP_Implementation(int32 InXP) override;
+	virtual void LevelUp_Implementation() override;
 	//~ IPlayerInterface
 
 private:

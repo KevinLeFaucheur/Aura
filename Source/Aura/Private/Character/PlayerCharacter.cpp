@@ -60,7 +60,7 @@ void APlayerCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
-int32 APlayerCharacter::GetPlayerLevel()
+int32 APlayerCharacter::GetPlayerLevel_Implementation()
 {
 	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
@@ -72,4 +72,9 @@ void APlayerCharacter::AddToXP_Implementation(int32 InXP)
 	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
 	CharacterPlayerState->AddToXP(InXP);
+}
+
+void APlayerCharacter::LevelUp_Implementation()
+{
+	
 }
