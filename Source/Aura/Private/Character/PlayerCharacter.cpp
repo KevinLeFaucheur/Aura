@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/ARPGAbilitySystemComponent.h"
+#include "AbilitySystem/Data/LevelUpInfo.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/CharacterPlayerController.h"
 #include "Player/CharacterPlayerState.h"
@@ -67,11 +68,60 @@ int32 APlayerCharacter::GetPlayerLevel_Implementation()
 	return CharacterPlayerState->GetPlayerLevel();
 }
 
+int32 APlayerCharacter::GetXP_Implementation() const
+{
+	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->GetXP();
+}
+
 void APlayerCharacter::AddToXP_Implementation(int32 InXP)
 {
 	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
 	CharacterPlayerState->AddToXP(InXP);
+}
+
+int32 APlayerCharacter::FindLevelForXP_Implementation(int32 InXP) const
+{
+	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->LevelUpInfo->FindLevelForXP(InXP);
+}
+
+int32 APlayerCharacter::GetAttributePointsReward_Implementation(int32 Level) const
+{
+	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->LevelUpInfo->LevelUpInformation[Level].AttributePointReward;
+}
+
+int32 APlayerCharacter::GetSpellPointsReward_Implementation(int32 Level) const
+{
+	const ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->LevelUpInfo->LevelUpInformation[Level].SpellPointReward;
+}
+
+void APlayerCharacter::AddToPlayerLevel_Implementation(int32 InLevel) const
+{
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	CharacterPlayerState->AddToLevel(InLevel);
+}
+
+void APlayerCharacter::AddToAttributePointsReward_Implementation(int32 InSpellPoints) const
+{
+	// ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	// check(CharacterPlayerState);
+	// TODO: Add AttributePoints to PlayerState
+}
+
+void APlayerCharacter::AddToSpellPointsReward_Implementation(int32 InSpellPoints) const
+{
+	// ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	// check(CharacterPlayerState);
+	// TODO: Add SpellPoints to PlayerState
 }
 
 void APlayerCharacter::LevelUp_Implementation()

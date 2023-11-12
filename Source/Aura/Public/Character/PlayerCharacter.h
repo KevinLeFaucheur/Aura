@@ -25,8 +25,15 @@ public:
 	//~ CombatInterface
 
 	//~ IPlayerInterface
+	virtual  int32 GetXP_Implementation() const override;
 	virtual void AddToXP_Implementation(int32 InXP) override;
+	virtual int32 FindLevelForXP_Implementation(int32 InXP) const override;
 	virtual void LevelUp_Implementation() override;
+	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
+	virtual int32 GetSpellPointsReward_Implementation(int32 Level) const override;
+	virtual void AddToPlayerLevel_Implementation(int32 InLevel) const override;
+	virtual void AddToAttributePointsReward_Implementation(int32 InSpellPoints) const override;
+	virtual void AddToSpellPointsReward_Implementation(int32 InSpellPoints) const override;
 	//~ IPlayerInterface
 
 private:
