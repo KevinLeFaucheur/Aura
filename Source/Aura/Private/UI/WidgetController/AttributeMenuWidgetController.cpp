@@ -5,9 +5,10 @@
 
 #include "AbilitySystem/ARPGAttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
+#include "Player/CharacterPlayerState.h"
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
-{
+{	
 	UARPGAttributeSet* AS = CastChecked<UARPGAttributeSet>(AttributeSet);
 	check(AttributeInfo);	
 	for (auto& Pair : AS->TagsToAttributes)
@@ -19,7 +20,18 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
         	}
         );
 	}
-
+	
+	ACharacterPlayerState* CharacterPlayerState = CastChecked<ACharacterPlayerState>(PlayerState);
+	CharacterPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+		[this] (int32 Points)
+	{
+		AttributePointsChangedDelegate.Broadcast(Points);
+	});
+	CharacterPlayerState->OnSpellPointsChangedDelegate.AddLambda(
+		[this] (int32 Points)
+	{
+		SpellPointsChangedDelegate.Broadcast(Points);
+	});
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()

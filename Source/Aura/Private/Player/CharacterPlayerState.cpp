@@ -25,6 +25,8 @@ void ACharacterPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 
 	DOREPLIFETIME(ACharacterPlayerState, Level);
 	DOREPLIFETIME(ACharacterPlayerState, XP);
+	DOREPLIFETIME(ACharacterPlayerState, AttributePoints);
+	DOREPLIFETIME(ACharacterPlayerState, SpellPoints);
 }
 
 void ACharacterPlayerState::OnRep_Level(int32 OldLevel)
@@ -35,6 +37,16 @@ void ACharacterPlayerState::OnRep_Level(int32 OldLevel)
 void ACharacterPlayerState::OnRep_XP(int32 InXP)
 {
 	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void ACharacterPlayerState::OnRep_AttributePoints(int32 InAttributePoints)
+{
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void ACharacterPlayerState::OnRep_SpellPoints(int32 InSpellPoints)
+{
+	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }
 
 void ACharacterPlayerState::SetXP(int32 InXP)
@@ -53,6 +65,18 @@ void ACharacterPlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;
 	OnLevelChangedDelegate.Broadcast(Level);
+}
+
+void ACharacterPlayerState::AddToAttributePoints(int32 InAttributePoints)
+{
+	AttributePoints += InAttributePoints;
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void ACharacterPlayerState::AddToSpellPoints(int32 InSpellPoints)
+{
+	SpellPoints += InSpellPoints;
+	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }
 
 void ACharacterPlayerState::AddToXP(int32 InXP)
