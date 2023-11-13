@@ -126,18 +126,32 @@ void APlayerCharacter::AddToPlayerLevel_Implementation(int32 InLevel) const
 	CharacterPlayerState->AddToLevel(InLevel);
 }
 
-void APlayerCharacter::AddToAttributePointsReward_Implementation(int32 InSpellPoints) const
+void APlayerCharacter::AddToAttributePointsReward_Implementation(int32 InAttributePoints) const
 {
-	// ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
-	// check(CharacterPlayerState);
-	// TODO: Add AttributePoints to PlayerState
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	CharacterPlayerState->AddToAttributePoints(InAttributePoints);
 }
 
 void APlayerCharacter::AddToSpellPointsReward_Implementation(int32 InSpellPoints) const
 {
-	// ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
-	// check(CharacterPlayerState);
-	// TODO: Add SpellPoints to PlayerState
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	CharacterPlayerState->AddToSpellPoints(InSpellPoints);
+}
+
+int32 APlayerCharacter::GetAttributePoints_Implementation() const
+{
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->GetAttributePoints();
+}
+
+int32 APlayerCharacter::GetSpellPoints_Implementation() const
+{
+	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
+	check(CharacterPlayerState);
+	return CharacterPlayerState->GetSpellPoints();
 }
 
 void APlayerCharacter::LevelUp_Implementation()

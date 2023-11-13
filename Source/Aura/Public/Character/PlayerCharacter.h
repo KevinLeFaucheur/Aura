@@ -35,8 +35,10 @@ public:
 	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
 	virtual int32 GetSpellPointsReward_Implementation(int32 Level) const override;
 	virtual void AddToPlayerLevel_Implementation(int32 InLevel) const override;
-	virtual void AddToAttributePointsReward_Implementation(int32 InSpellPoints) const override;
+	virtual void AddToAttributePointsReward_Implementation(int32 InAttributePoints) const override;
 	virtual void AddToSpellPointsReward_Implementation(int32 InSpellPoints) const override;
+	virtual int32 GetAttributePoints_Implementation() const override;
+	virtual int32 GetSpellPoints_Implementation() const override;
 	//~ IPlayerInterface
 
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

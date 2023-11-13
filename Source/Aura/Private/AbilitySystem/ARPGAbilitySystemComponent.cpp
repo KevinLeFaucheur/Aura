@@ -3,9 +3,11 @@
 
 #include "AbilitySystem/ARPGAbilitySystemComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "ARPGGameplayTags.h"
 #include "AbilitySystem/Abilities/BaseGameplayAbility.h"
 #include "Aura/AuraLogChannels.h"
+#include "Interaction/PlayerInterface.h"
 
 void UARPGAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -120,6 +122,31 @@ void UARPGAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 		{
 			AbilitySpecInputReleased(AbilitySpec);
 		}
+	}
+}
+
+void UARPGAbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	if(GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		if (IPlayerInterface::Execute_GetAttributePoints(GetAvatarActor()) > 0)
+		{
+			ServerUpgradeAttribute(AttributeTag);
+		}
+	}
+}
+
+void UARPGAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
+{
+	FGameplayEventData Payload;
+	Payload.EventMagnitude = 1.f;
+	Payload.EventTag = AttributeTag;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetAvatarActor(), AttributeTag, Payload);
+	
+	if(GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		IPlayerInterface::Execute_AddToAttributePointsReward(GetAvatarActor(), -1);
 	}
 }
 
