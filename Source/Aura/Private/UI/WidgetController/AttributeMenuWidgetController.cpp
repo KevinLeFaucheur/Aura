@@ -10,9 +10,8 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {	
-	UARPGAttributeSet* AS = CastChecked<UARPGAttributeSet>(AttributeSet);
 	check(AttributeInfo);	
-	for (auto& Pair : AS->TagsToAttributes)
+	for (auto& Pair : GetARPGAttributeSet()->TagsToAttributes)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value).AddLambda(
         	[this, Pair](const FOnAttributeChangeData& Data)
@@ -22,8 +21,7 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
         );
 	}
 	
-	ACharacterPlayerState* CharacterPlayerState = CastChecked<ACharacterPlayerState>(PlayerState);
-	CharacterPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	GetCharacterPlayerState()->OnAttributePointsChangedDelegate.AddLambda(
 		[this] (int32 Points)
 	{
 		AttributePointsChangedDelegate.Broadcast(Points);
@@ -43,9 +41,7 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	{
 		BroadcastAttributeInfo(Pair.Key, Pair.Value);
 	}
-	
-	ACharacterPlayerState* CharacterPlayerState = CastChecked<ACharacterPlayerState>(PlayerState);
-	AttributePointsChangedDelegate.Broadcast(CharacterPlayerState->GetAttributePoints());
+	AttributePointsChangedDelegate.Broadcast(GetCharacterPlayerState()->GetAttributePoints());
 	SpellPointsChangedDelegate.Broadcast(CharacterPlayerState->GetSpellPoints());
 }
 

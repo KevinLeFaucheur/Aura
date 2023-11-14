@@ -7,7 +7,13 @@
 #include "UObject/NoExportTypes.h"
 #include "WidgetController.generated.h"
 
+class UAbilityInfo;
+class UARPGAttributeSet;
+class UARPGAbilitySystemComponent;
+class ACharacterPlayerState;
+class ACharacterPlayerController;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChangedSignature, int32, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FBaseAbilityInfo&, Info);
 
 class UAttributeSet;
 class UAbilitySystemComponent;
@@ -54,8 +60,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
 	virtual void BindCallbacksToDependencies();
+	 void BroadcastAbilityInfo();
+
+	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
+	FAbilityInfoSignature AbilityInfoDelegate;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
+	
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
 
@@ -67,4 +80,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
+	
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<ACharacterPlayerController> CharacterPlayerController;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<ACharacterPlayerState>CharacterPlayerState;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UARPGAbilitySystemComponent> ARPGAbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UARPGAttributeSet> ARPGAttributeSet;
+
+	ACharacterPlayerController* GetCharacterPlayerController();
+	ACharacterPlayerState* GetCharacterPlayerState();
+	UARPGAbilitySystemComponent* GetARPGAbilitySystemComponent();
+	UARPGAttributeSet* GetARPGAttributeSet();
 };

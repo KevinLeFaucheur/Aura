@@ -7,7 +7,7 @@
 #include "ARPGAbilitySystemComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /* Asset Tags */ );
-DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven, UARPGAbilitySystemComponent*);
+DECLARE_MULTICAST_DELEGATE(FAbilitiesGiven);
 DECLARE_DELEGATE_OneParam(FForEachAbility, const FGameplayAbilitySpec&);
 
 /**

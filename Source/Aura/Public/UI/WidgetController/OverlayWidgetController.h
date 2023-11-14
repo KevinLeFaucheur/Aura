@@ -30,7 +30,6 @@ struct FUIWidgetRow : public FTableRowBase
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageWidgetRowSignature,  FUIWidgetRow, Row);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FBaseAbilityInfo&, Info);
 
 /**
  * 
@@ -58,9 +57,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
 	FOnMessageWidgetRowSignature OnMessageWidgetRowDelegate;
-
-	UPROPERTY(BlueprintAssignable, Category="GAS|Messages")
-	FAbilityInfoSignature AbilityInfoDelegate;
 	
 	UPROPERTY(BlueprintAssignable, Category="GAS|XP")
 	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
@@ -73,12 +69,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
-	TObjectPtr<UAbilityInfo> AbilityInfo;
-
-	void OnInitializeStartupAbilities(UARPGAbilitySystemComponent* ARPGAbilitySystemComponent);
-
-	void OnXPChanged(int32 NewXP) const;
+	void OnXPChanged(int32 NewXP);
 
 	template<typename  T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
