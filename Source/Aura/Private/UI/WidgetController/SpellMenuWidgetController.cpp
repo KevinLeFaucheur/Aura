@@ -5,10 +5,12 @@
 
 #include "AbilitySystem/ARPGAbilitySystemComponent.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
+#include "Player/CharacterPlayerState.h"
 
 void USpellMenuWidgetController::BroadcastInitialValues()
 {
 	BroadcastAbilityInfo();
+	SpellPointsChanged.Broadcast(GetCharacterPlayerState()->GetSpellPoints());
 }
 
 void USpellMenuWidgetController::BindCallbacksToDependencies()
@@ -22,5 +24,11 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 				Info.StatusTag = StatusTag;
 				AbilityInfoDelegate.Broadcast(Info);
 			}
+		});
+
+	GetCharacterPlayerState()->OnSpellPointsChangedDelegate.AddLambda(
+		[this] (int32 SpellsPoints)
+		{
+			SpellPointsChanged.Broadcast(SpellsPoints);
 		});
 }
