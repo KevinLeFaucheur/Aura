@@ -43,10 +43,10 @@ public:
 	void AddToPlayerLevel(int32 InLevel) const;
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void AddToAttributePointsReward(int32 InAttributePoints) const;
+	void AddToAttributePoints(int32 InAttributePoints) const;
 	
 	UFUNCTION(BlueprintNativeEvent)
-	void AddToSpellPointsReward(int32 InSpellPoints) const;
+	void AddToSpellPoints(int32 InSpellPoints) const;
 	
 	UFUNCTION(BlueprintNativeEvent)
 	int32 FindLevelForXP(int32 InXP) const;

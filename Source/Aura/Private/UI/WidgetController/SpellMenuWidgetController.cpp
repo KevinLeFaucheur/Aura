@@ -17,7 +17,7 @@ void USpellMenuWidgetController::BroadcastInitialValues()
 void USpellMenuWidgetController::BindCallbacksToDependencies()
 {
 	GetARPGAbilitySystemComponent()->AbilityStatusChangedDelegate.AddLambda(
-		[this] (const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
+		[this] (const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 NewLevel)
 		{
 			if(SelectedAbility.Ability.MatchesTagExact(AbilityTag))
 			{
@@ -76,8 +76,16 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 	OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton);
 }
 
+void USpellMenuWidgetController::SpendPointButtonPressed()
+{
+	if(GetARPGAbilitySystemComponent())
+	{
+		GetARPGAbilitySystemComponent()->ServerSpendSpellPoint(SelectedAbility.Ability);
+	}
+}
+
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& StatusTag, int32 SpellPoints,
-	bool& bShouldEnableSpendPointButton, bool& bShouldEnableEquipButton)
+                                                     bool& bShouldEnableSpendPointButton, bool& bShouldEnableEquipButton)
 {
 	const FARPGGameplayTags GameplayTags = FARPGGameplayTags::Get();
 	bShouldEnableEquipButton = false;

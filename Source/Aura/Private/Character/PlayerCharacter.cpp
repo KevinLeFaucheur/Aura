@@ -131,14 +131,14 @@ void APlayerCharacter::AddToPlayerLevel_Implementation(int32 InLevel) const
 	}
 }
 
-void APlayerCharacter::AddToAttributePointsReward_Implementation(int32 InAttributePoints) const
+void APlayerCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints) const
 {
 	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
 	CharacterPlayerState->AddToAttributePoints(InAttributePoints);
 }
 
-void APlayerCharacter::AddToSpellPointsReward_Implementation(int32 InSpellPoints) const
+void APlayerCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints) const
 {
 	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
