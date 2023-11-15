@@ -35,6 +35,7 @@ void UWidgetController::BroadcastAbilityInfo()
 		{
 			FBaseAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(ARPGAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
 			Info.InputTag = ARPGAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+			Info.StatusTag = ARPGAbilitySystemComponent->GetStatusTagFromSpec(AbilitySpec);
 			AbilityInfoDelegate.Broadcast(Info);
 		}
 	);

@@ -39,6 +39,7 @@ void UARPGAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 		if(const UBaseGameplayAbility* BaseAbility = Cast<UBaseGameplayAbility>(AbilitySpec.Ability))
 		{
 			AbilitySpec.DynamicAbilityTags.AddTag(BaseAbility->StartupInputTag);
+			AbilitySpec.DynamicAbilityTags.AddTag(FARPGGameplayTags::Get().Abilities_Status_Equipped);
 			GiveAbility(AbilitySpec);
 		}
 	}
@@ -88,6 +89,18 @@ FGameplayTag UARPGAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbi
 	for(FGameplayTag Tag : AbilitySpec.DynamicAbilityTags)
 	{
 		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag"))))
+		{
+			return Tag;
+		}
+	}
+	return FGameplayTag();
+}
+
+FGameplayTag UARPGAbilitySystemComponent::GetStatusTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for(FGameplayTag Tag : AbilitySpec.DynamicAbilityTags)
+	{
+		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities.Status"))))
 		{
 			return Tag;
 		}
