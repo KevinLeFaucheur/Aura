@@ -124,10 +124,18 @@ int32 UARPGAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* Worl
 
 UCharacterClassInfo* UARPGAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
 {
-	AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	const AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if(ARPGGameMode == nullptr) return nullptr;
 
 	return ARPGGameMode->CharacterClassInfo;
+}
+
+UAbilityInfo* UARPGAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
+{
+	const AARPGGameModeBase* ARPGGameMode = Cast<AARPGGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if(ARPGGameMode == nullptr) return nullptr;
+
+	return ARPGGameMode->AbilityInfo;	
 }
 
 bool UARPGAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)

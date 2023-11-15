@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ARPGAbilitySystemLibrary.generated.h"
 
+class UAbilityInfo;
 class ACharacterHUD;
 struct FWidgetControllerParams;
 struct FGameplayEffectContextHandle;
@@ -43,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|AbilityInfo")
+	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintPure, Category="ARPGAbilitySystemLibrary|GameplayEffects")
 	static  bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
