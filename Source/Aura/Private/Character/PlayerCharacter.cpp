@@ -124,6 +124,11 @@ void APlayerCharacter::AddToPlayerLevel_Implementation(int32 InLevel) const
 	ACharacterPlayerState* CharacterPlayerState = GetPlayerState<ACharacterPlayerState>();
 	check(CharacterPlayerState);
 	CharacterPlayerState->AddToLevel(InLevel);
+
+	if (UARPGAbilitySystemComponent* ARPGASC = Cast<UARPGAbilitySystemComponent>(GetAbilitySystemComponent()))
+	{
+		ARPGASC->UpdateAbilityStatuses(CharacterPlayerState->GetPlayerLevel());
+	}
 }
 
 void APlayerCharacter::AddToAttributePointsReward_Implementation(int32 InAttributePoints) const

@@ -181,8 +181,15 @@ void UARPGAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 			AbilitySpec.DynamicAbilityTags.AddTag(FARPGGameplayTags::Get().Abilities_Status_Eligible);
 			GiveAbility(AbilitySpec);
 			MarkAbilitySpecDirty(AbilitySpec); // Force replication right away
+			ClientUpdateAbilityStatus(Info.AbilityTag, FARPGGameplayTags::Get().Abilities_Status_Eligible);
 		}
 	}
+}
+
+void UARPGAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
+	const FGameplayTag& StatusTag)
+{
+	AbilityStatusChangedDelegate.Broadcast(AbilityTag, StatusTag);
 }
 
 void UARPGAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
