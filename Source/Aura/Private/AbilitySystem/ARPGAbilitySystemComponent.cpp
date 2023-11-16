@@ -212,8 +212,26 @@ void UARPGAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
 	}
 }
 
+bool UARPGAbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag& AbilityTag, FString& OutDescription,
+	FString& OutNextLevelDescription)
+{
+	if(const FGameplayAbilitySpec* AbilitySpec = GetSpecFromAbilityTag(AbilityTag))
+	{
+		if (UBaseGameplayAbility* BaseAbility = Cast<UBaseGameplayAbility>(AbilitySpec->Ability))
+		{
+			OutDescription = BaseAbility->GetDescription(AbilitySpec->Level);
+			OutNextLevelDescription = BaseAbility->GetNextLevelDescription(AbilitySpec->Level + 1);
+			return true;
+		}
+	}
+	UAbilityInfo* AbilityInfo = UARPGAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
+	OutDescription = UBaseGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	OutNextLevelDescription = FString();
+	return false;
+}
+
 void UARPGAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
-	const FGameplayTag& StatusTag, int32 AbilityLevel)
+                                                                           const FGameplayTag& StatusTag, int32 AbilityLevel)
 {
 	AbilityStatusChangedDelegate.Broadcast(AbilityTag, StatusTag, AbilityLevel);
 }

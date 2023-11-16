@@ -64,3 +64,17 @@ void UProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation, 
 	Projectile->DamageEffectSpecHandle = SpecHandle;
 	Projectile->FinishSpawning(SpawnTransform);
 }
+
+FString UProjectileSpell::GetDescription(int32 Level)
+{
+	const FString NumOfProjectiles =  Level == 1 ? FString("a bolt") : FString::Printf(TEXT("%d bolts"), FMath::Min(NumProjectiles, Level));
+	const int32 Damage = DamageTypes[FARPGGameplayTags::Get().Damage_Fire].GetValueAtLevel(Level);
+	return FString::Printf(TEXT("<Title>FIRE BOLT</>\n\n<Default>Launches %s of fire, exploding on impact and dealing: </><Damage>%d</><Default> fire damage with a chance to burn.</>\n\n<Small>Level: </><Level>%d</>"), *NumOfProjectiles, Damage, Level);
+}
+
+FString UProjectileSpell::GetNextLevelDescription(int32 Level)
+{
+	const FString NumOfProjectiles =  Level == 1 ? FString("a bolt") : FString::Printf(TEXT("%d bolts"), FMath::Min(NumProjectiles, Level));
+	const int32 Damage = DamageTypes[FARPGGameplayTags::Get().Damage_Fire].GetValueAtLevel(Level);
+	return FString::Printf(TEXT("<Title>NEXT LEVEL</>\n\n<Default>Launches %s of fire, exploding on impact and dealing: </><Damage>%d</><Default> fire damage with a chance to burn.</>\n\n<Small>Level: </><Level>%d</>"), *NumOfProjectiles, Damage, Level);
+}

@@ -25,7 +25,10 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 				bool bEnableSpendPointButton = false;
 				bool bEnableEquipButton = false;
 				ShouldEnableButtons(StatusTag, CurrentSpellPoints, bEnableSpendPointButton, bEnableEquipButton);
-				OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton);
+				FString Description;
+				FString NextLevelDescription;
+				GetARPGAbilitySystemComponent()->GetDescriptionsByAbilityTag(AbilityTag, Description, NextLevelDescription);
+				OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton, Description, NextLevelDescription);
 			}
 			
 			if(AbilityInfo)
@@ -45,7 +48,10 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 			bool bEnableSpendPointButton = false;
 			bool bEnableEquipButton = false;
 			ShouldEnableButtons(SelectedAbility.Status, CurrentSpellPoints, bEnableSpendPointButton, bEnableEquipButton);
-			OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton);
+			FString Description;
+			FString NextLevelDescription;
+			GetARPGAbilitySystemComponent()->GetDescriptionsByAbilityTag(SelectedAbility.Ability, Description, NextLevelDescription);
+			OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton, Description, NextLevelDescription);
 		});
 }
 
@@ -73,7 +79,10 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 	bool bEnableSpendPointButton = false;
 	bool bEnableEquipButton = false;
 	ShouldEnableButtons(AbilityStatus, SpellPoints, bEnableSpendPointButton, bEnableEquipButton);
-	OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton);
+	FString Description;
+	FString NextLevelDescription;
+	GetARPGAbilitySystemComponent()->GetDescriptionsByAbilityTag(AbilityTag, Description, NextLevelDescription);
+	OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton, Description, NextLevelDescription);
 }
 
 void USpellMenuWidgetController::SpendPointButtonPressed()
