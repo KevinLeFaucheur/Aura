@@ -43,11 +43,11 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	{
 		if(GetARPGAbilitySystemComponent()->bStartupAbilitiesGiven)
 		{
-			BroadcastInitialValues();
+			BroadcastAbilityInfo();
 		}
 		else
 		{
-			GetARPGAbilitySystemComponent()->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastInitialValues);
+			GetARPGAbilitySystemComponent()->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
 		}
 		
 		GetARPGAbilitySystemComponent()->EffectAssetTags.AddLambda(
