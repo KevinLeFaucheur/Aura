@@ -39,6 +39,8 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 			}
 		});
 
+	GetARPGAbilitySystemComponent()->AbilityEquippedDelegate.AddUObject(this, &USpellMenuWidgetController::OnAbilityEquipped);
+	
 	GetCharacterPlayerState()->OnSpellPointsChangedDelegate.AddLambda(
 		[this] (int32 SpellsPoints)
 		{
@@ -57,6 +59,13 @@ void USpellMenuWidgetController::BindCallbacksToDependencies()
 
 void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityTag)
 {
+	if(bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType =  AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityTypeTag;
+		StopWaitingForEquipSelectionDelegate.Broadcast(SelectedAbilityType);		
+		bWaitingForEquipSelection = false;
+	}
+	
 	const FARPGGameplayTags GameplayTags = FARPGGameplayTags::Get();
 	const int32 SpellPoints = GetCharacterPlayerState()->GetSpellPoints();
 	FGameplayTag AbilityStatus;
@@ -87,6 +96,12 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 
 void USpellMenuWidgetController::SpellGlobeDeselect()
 {
+	if(bWaitingForEquipSelection)
+	{
+		const FGameplayTag SelectedAbilityType =  AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityTypeTag;
+		StopWaitingForEquipSelectionDelegate.Broadcast(SelectedAbilityType);
+		bWaitingForEquipSelection = false;
+	}
 	SelectedAbility.Ability = FARPGGameplayTags::Get().Abilities_None;
 	SelectedAbility.Status = FARPGGameplayTags::Get().Abilities_Status_Locked;
 	OnSpellGlobeSelectedDelegate.Broadcast(false, false, FString(), FString());
@@ -98,6 +113,51 @@ void USpellMenuWidgetController::SpendPointButtonPressed()
 	{
 		GetARPGAbilitySystemComponent()->ServerSpendSpellPoint(SelectedAbility.Ability);
 	}
+}
+
+void USpellMenuWidgetController::EquipButtonPressed()
+{
+	const FGameplayTag& AbilityTypeTag = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityTypeTag;
+	WaitForEquipSelectionDelegate.Broadcast(AbilityTypeTag);
+	bWaitingForEquipSelection = true;
+
+	const FGameplayTag SelectedStatus = GetARPGAbilitySystemComponent()->GetStatusFromAbilityTag(SelectedAbility.Ability);
+	if(SelectedStatus.MatchesTagExact(FARPGGameplayTags::Get().Abilities_Status_Equipped))
+	{
+		SelectedSlot = GetARPGAbilitySystemComponent()->GetInputTagFromAbilityTag(SelectedAbility.Ability);
+	}
+}
+
+void USpellMenuWidgetController::SpellRowGlobePressed(const FGameplayTag& SlotTag, const FGameplayTag& AbilityType)
+{
+	if(!bWaitingForEquipSelection) return;
+	// check selected ability against the slot ability type (offensive / passive)
+
+	const FGameplayTag& SelectedAbilityType = AbilityInfo->FindAbilityInfoForTag(SelectedAbility.Ability).AbilityTypeTag;
+	if(!SelectedAbilityType.MatchesTagExact(AbilityType)) return;
+
+	GetARPGAbilitySystemComponent()->ServerEquipAbility(SelectedAbility.Ability, SlotTag);
+}
+
+void USpellMenuWidgetController::OnAbilityEquipped(const FGameplayTag& AbilityTag, const FGameplayTag& Status,
+	const FGameplayTag& Slot, const FGameplayTag& PreviousSlot)
+{
+	const FARPGGameplayTags& GameplayTags = FARPGGameplayTags::Get();
+	
+	bWaitingForEquipSelection = false;
+	FBaseAbilityInfo LastSlotInfo;
+	LastSlotInfo.StatusTag = GameplayTags.Abilities_Status_Unlocked;
+	LastSlotInfo.InputTag = PreviousSlot;
+	LastSlotInfo.AbilityTag = GameplayTags.Abilities_None;
+	// Broadcast empty info if previous slot is a valid slot, only if equipping an already equipped spell
+	AbilityInfoDelegate.Broadcast(LastSlotInfo);
+	
+	FBaseAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AbilityTag);
+	Info.StatusTag = Status;
+	Info.InputTag = Slot;
+	AbilityInfoDelegate.Broadcast(Info);
+
+	StopWaitingForEquipSelectionDelegate.Broadcast(AbilityInfo->FindAbilityInfoForTag(AbilityTag).AbilityTypeTag);
 }
 
 void USpellMenuWidgetController::ShouldEnableButtons(const FGameplayTag& StatusTag, int32 SpellPoints,
