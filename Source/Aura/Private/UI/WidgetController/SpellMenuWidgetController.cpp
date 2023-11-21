@@ -85,6 +85,13 @@ void USpellMenuWidgetController::SpellGlobeSelected(const FGameplayTag& AbilityT
 	OnSpellGlobeSelectedDelegate.Broadcast(bEnableSpendPointButton, bEnableEquipButton, Description, NextLevelDescription);
 }
 
+void USpellMenuWidgetController::SpellGlobeDeselect()
+{
+	SelectedAbility.Ability = FARPGGameplayTags::Get().Abilities_None;
+	SelectedAbility.Status = FARPGGameplayTags::Get().Abilities_Status_Locked;
+	OnSpellGlobeSelectedDelegate.Broadcast(false, false, FString(), FString());
+}
+
 void USpellMenuWidgetController::SpendPointButtonPressed()
 {
 	if(GetARPGAbilitySystemComponent())

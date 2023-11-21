@@ -225,7 +225,14 @@ bool UARPGAbilitySystemComponent::GetDescriptionsByAbilityTag(const FGameplayTag
 		}
 	}
 	UAbilityInfo* AbilityInfo = UARPGAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
-	OutDescription = UBaseGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+	if(!AbilityTag.IsValid() || AbilityTag.MatchesTagExact(FARPGGameplayTags::Get().Abilities_None))
+	{
+		OutDescription = FString();
+	} else
+	{
+		OutDescription = UBaseGameplayAbility::GetLockedDescription(AbilityInfo->FindAbilityInfoForTag(AbilityTag).LevelRequirement);
+		
+	}
 	OutNextLevelDescription = FString();
 	return false;
 }
