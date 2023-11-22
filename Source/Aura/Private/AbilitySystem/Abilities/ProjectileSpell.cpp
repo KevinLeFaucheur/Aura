@@ -41,7 +41,7 @@ void UProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation, 
 		 Cast<APawn>(GetOwningActorFromActorInfo()),
 		 ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-	const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	/*const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 	FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
 	EffectContextHandle.SetAbility(this);
 	EffectContextHandle.AddSourceObject(Projectile);
@@ -54,16 +54,19 @@ void UProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation, 
 		
 	const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), EffectContextHandle);
 
-	const FARPGGameplayTags GameplayTags = FARPGGameplayTags::Get();
+	const FARPGGameplayTags GameplayTags = FARPGGameplayTags::Get();*/
 
 	/*for (auto& Pair : DamageTypes)
 	{
 		const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, Pair.Key, ScaledDamage);
 	}*/
-	const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	
+	/*const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, DamageType, ScaledDamage);
 	
-	Projectile->DamageEffectSpecHandle = SpecHandle;
+	Projectile->DamageEffectSpecHandle = SpecHandle;*/
+
+	Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
 	Projectile->FinishSpawning(SpawnTransform);
 }

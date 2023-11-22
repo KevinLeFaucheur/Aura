@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayEffectTypes.h"
+#include "AbilitySystemTypes.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
@@ -23,10 +23,14 @@ public:
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
 
 	UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+	FDamageEffectParams DamageEffectParams;
+
+	/*UPROPERTY(BlueprintReadWrite, meta=(ExposeOnSpawn = true))
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;*/
 
 protected:
 	virtual void BeginPlay() override;
+	void OnHit();
 	virtual  void Destroyed() override;
 
 	UFUNCTION()
