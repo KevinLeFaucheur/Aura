@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemTypes.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ARPGAbilitySystemLibrary.generated.h"
@@ -47,6 +48,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|AbilityInfo")
 	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|DamageEffects")
+	static FGameplayEffectContextHandle ApplyDamageEffect(const FDamageEffectParams& Params);
 
 	UFUNCTION(BlueprintPure, Category="ARPGAbilitySystemLibrary|GameplayEffects")
 	static  bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);

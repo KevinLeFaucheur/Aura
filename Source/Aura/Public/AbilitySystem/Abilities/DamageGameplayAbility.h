@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemTypes.h"
 #include "AbilitySystem/Abilities/BaseGameplayAbility.h"
 #include "Interaction/CombatInterface.h"
 #include "DamageGameplayAbility.generated.h"
@@ -17,6 +18,8 @@ class AURA_API UDamageGameplayAbility : public UBaseGameplayAbility
 public:
 	UFUNCTION(BlueprintCallable)
 	void CauseDamage(AActor* TargetActor);
+
+	FDamageEffectParams MakeDamageEffectParamsFromClassDefaults(AActor* TargetActor = nullptr) const;
 
 protected:
 	
