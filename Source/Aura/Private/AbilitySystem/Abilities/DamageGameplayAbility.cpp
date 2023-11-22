@@ -9,11 +9,15 @@
 void UDamageGameplayAbility::CauseDamage(AActor* TargetActor)
 {
 	FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass, 1.f);
-	for (TTuple<FGameplayTag, FScalableFloat> Pair : DamageTypes)
+	/*for (TTuple<FGameplayTag, FScalableFloat> Pair : DamageTypes)
 	{
 		const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, Pair.Key, ScaledDamage);
-	}
+	}*/
+	
+	const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, DamageType, ScaledDamage);
+	
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
 		*DamageSpecHandle.Data.Get(),
 		UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor)
@@ -29,8 +33,8 @@ FTaggedMontage UDamageGameplayAbility::GetRandomTaggedMontageFromArray(const TAr
 	return  FTaggedMontage();
 }
 
-float UDamageGameplayAbility::GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType) const
+/*float UDamageGameplayAbility::GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType) const
 {
 	checkf(DamageTypes.Contains(DamageType), TEXT("Gameplay Ability [%s] doesn't containt DamageType [%s]"), *GetNameSafe(this), *DamageType.ToString());
 	return DamageTypes[DamageType].GetValueAtLevel(InLevel);
-}
+}*/

@@ -10,7 +10,9 @@ FString UFireBolt::GetDescription(int32 Level)
 	const FString NumOfProjectiles =  Level == 1 ? FString("a bolt") : FString::Printf(TEXT("%d bolts"), FMath::Min(NumProjectiles, Level));
 	const float ManaCost = FMath::Abs(GetManaCost(Level));
 	const float Cooldown = GetCooldown(Level);
-	const int32 Damage = GetDamageByDamageType(Level,FARPGGameplayTags::Get().Damage_Fire);
+	
+	const int32 ScaledDamage = Damage.GetValueAtLevel(Level);
+	
 	return FString::Printf(TEXT(
 		"<Title>FIRE BOLT</>\n\n"
 		// Level
@@ -27,7 +29,7 @@ FString UFireBolt::GetDescription(int32 Level)
 		ManaCost,
 		Cooldown,
 		*NumOfProjectiles,
-		Damage);
+		ScaledDamage);
 }
 
 FString UFireBolt::GetNextLevelDescription(int32 Level)
@@ -35,7 +37,7 @@ FString UFireBolt::GetNextLevelDescription(int32 Level)
 	const FString NumOfProjectiles =  Level == 1 ? FString("a bolt") : FString::Printf(TEXT("%d bolts"), FMath::Min(NumProjectiles, Level));
 	const float ManaCost = FMath::Abs(GetManaCost(Level));
 	const float Cooldown = GetCooldown(Level);
-	const int32 Damage = GetDamageByDamageType(Level,FARPGGameplayTags::Get().Damage_Fire);
+	const int32 ScaledDamage = Damage.GetValueAtLevel(Level);
 	return FString::Printf(TEXT(
 		"<Title>NEXT LEVEL</>\n\n"
 		"<Small>Level: </><Level>%d</>\n"
@@ -46,5 +48,5 @@ FString UFireBolt::GetNextLevelDescription(int32 Level)
 		ManaCost,
 		Cooldown,
 		*NumOfProjectiles,
-		Damage);
+		ScaledDamage);
 }
