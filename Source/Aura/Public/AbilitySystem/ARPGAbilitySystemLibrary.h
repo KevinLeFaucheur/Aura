@@ -79,7 +79,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
 	static  void SetIsCriticalHit(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCriticalHit);
 
-	/*UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
+	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
 	static  void SetIsSuccessfulDebuff(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, bool bInIsSuccessfulDebuff);
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
@@ -89,7 +89,10 @@ public:
 	static  void SetDebuffDuration(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, float InDuration);
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
-	static  void SetDebuffFrequency(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, float InFrequency);*/
+	static  void SetDebuffFrequency(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, float InFrequency);
+
+	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayEffects")
+	static  void SetDamageType(UPARAM(Ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InDamageType);
 
 	UFUNCTION(BlueprintCallable, Category="ARPGAbilitySystemLibrary|GameplayMechanics")
 	static  void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
@@ -100,5 +103,6 @@ public:
 	static int32 GetXPRewardForClassAndLevel(const UObject* WorldContextObject, ECharacterClass CharacterClass, int32 CharacterLevel);
 	
 };
+
 
 
