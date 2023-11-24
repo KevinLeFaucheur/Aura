@@ -147,6 +147,7 @@ FGameplayEffectContextHandle UARPGAbilitySystemLibrary::ApplyDamageEffect(const 
 	
 	FGameplayEffectContextHandle EffectContextHandle = Params.SourceAbilitySystemComponent->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(SourceAvatarActor);
+	SetDeathImpulse(EffectContextHandle, Params.DeathImpulse);
 	const FGameplayEffectSpecHandle SpecHandle = Params.SourceAbilitySystemComponent->MakeOutgoingSpec(Params.DamageGameplayEffectClass, Params.AbilityLevel, EffectContextHandle);
 
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, Params.DamageType, Params.BaseDamage);
@@ -226,6 +227,15 @@ FGameplayTag UARPGAbilitySystemLibrary::GetDamageType(const FGameplayEffectConte
 	return FGameplayTag();
 }
 
+FVector UARPGAbilitySystemLibrary::GetDeathImpulse(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FARPGGameplayEffectContext* ARPGEffectContext = static_cast<const FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return ARPGEffectContext->GetDeathImpulse();
+	}
+	return FVector::ZeroVector;
+}
+
 void UARPGAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
 {
 	if (FARPGGameplayEffectContext* ARPGEffectContext = static_cast<FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
@@ -283,6 +293,15 @@ void UARPGAbilitySystemLibrary::SetDamageType(FGameplayEffectContextHandle& Effe
 	{
 		TSharedPtr<FGameplayTag> DamageType = MakeShared<FGameplayTag>(InDamageType);
 		return ARPGEffectContext->SetDamageType(DamageType);
+	}	
+}
+
+void UARPGAbilitySystemLibrary::SetDeathImpulse(FGameplayEffectContextHandle& EffectContextHandle,
+	const FVector& InDeathImpulse)
+{
+	if (FARPGGameplayEffectContext* ARPGEffectContext = static_cast<FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return ARPGEffectContext->SetDeathImpulse(InDeathImpulse);
 	}	
 }
 
