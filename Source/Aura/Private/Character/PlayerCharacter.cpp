@@ -49,6 +49,7 @@ void APlayerCharacter::InitAbilityActorInfo()
 	Cast<UARPGAbilitySystemComponent>(CharacterPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = CharacterPlayerState->GetAbilitySystemComponent();
 	AttributeSet = CharacterPlayerState->GetAttributeSet();
+	OnASCRegistered.Broadcast(AbilitySystemComponent);
 
 	if (ACharacterPlayerController* CharacterPlayerController = Cast<ACharacterPlayerController>(GetController()))
 	{
