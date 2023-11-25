@@ -167,10 +167,11 @@ void UARPGAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		{
 			// TODO: Death Impulse
 			
+			
 			ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
 			if(CombatInterface)
 			{
-				CombatInterface->Die();
+				CombatInterface->Die(UARPGAbilitySystemLibrary::GetDeathImpulse(Props.EffectContextHandle));
 			}
 			SendXPEvent(Props);
 		}
