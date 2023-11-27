@@ -148,6 +148,7 @@ FGameplayEffectContextHandle UARPGAbilitySystemLibrary::ApplyDamageEffect(const 
 	FGameplayEffectContextHandle EffectContextHandle = Params.SourceAbilitySystemComponent->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(SourceAvatarActor);
 	SetDeathImpulse(EffectContextHandle, Params.DeathImpulse);
+	SetKnockbackForce(EffectContextHandle, Params.KnockbackForce);
 	const FGameplayEffectSpecHandle SpecHandle = Params.SourceAbilitySystemComponent->MakeOutgoingSpec(Params.DamageGameplayEffectClass, Params.AbilityLevel, EffectContextHandle);
 
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, Params.DamageType, Params.BaseDamage);
@@ -236,6 +237,15 @@ FVector UARPGAbilitySystemLibrary::GetDeathImpulse(const FGameplayEffectContextH
 	return FVector::ZeroVector;
 }
 
+FVector UARPGAbilitySystemLibrary::GetKnockbackForce(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FARPGGameplayEffectContext* ARPGEffectContext = static_cast<const FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return ARPGEffectContext->GetKnockbackForce();
+	}
+	return FVector::ZeroVector;
+}
+
 void UARPGAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
 {
 	if (FARPGGameplayEffectContext* ARPGEffectContext = static_cast<FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
@@ -302,6 +312,15 @@ void UARPGAbilitySystemLibrary::SetDeathImpulse(FGameplayEffectContextHandle& Ef
 	if (FARPGGameplayEffectContext* ARPGEffectContext = static_cast<FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		return ARPGEffectContext->SetDeathImpulse(InDeathImpulse);
+	}	
+}
+
+void UARPGAbilitySystemLibrary::SetKnockbackForce(FGameplayEffectContextHandle& EffectContextHandle,
+	const FVector& InKnockbackForce)
+{
+	if (FARPGGameplayEffectContext* ARPGEffectContext = static_cast<FARPGGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return ARPGEffectContext->SetKnockbackForce(InKnockbackForce);
 	}	
 }
 

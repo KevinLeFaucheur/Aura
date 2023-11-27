@@ -180,6 +180,12 @@ void UARPGAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 			FGameplayTagContainer TagContainer;
 			TagContainer.AddTag(FARPGGameplayTags::Get().Effects_HitReact);
 			Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+
+			const FVector& KnockbackForce = UARPGAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
+			if(!KnockbackForce.IsNearlyZero(1.f))
+			{
+				Props.TargetCharacter->LaunchCharacter(KnockbackForce, true, true);
+			}
 		}
 		const bool bBlockedHit = UARPGAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
 		const bool bCriticaldHit = UARPGAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);

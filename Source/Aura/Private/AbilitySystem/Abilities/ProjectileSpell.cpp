@@ -21,7 +21,6 @@ void UProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag, bool bOverridePitch, float PitchOverride)
 {
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
-
 	if(!bIsServer) return;;
 
 	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(), SocketTag);
