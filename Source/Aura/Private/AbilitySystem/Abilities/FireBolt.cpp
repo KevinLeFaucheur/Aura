@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/FireBolt.h"
 
+#include "AbilitySystem/ARPGAbilitySystemLibrary.h"
+#include "Actor/Projectile.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag,
@@ -16,7 +18,37 @@ void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const 
 	if(bOverridePitch) Rotation.Pitch = PitchOverride;
 
 	const FVector Forward = Rotation.Vector();
-	const FVector LeftOfSpread = Forward.RotateAngleAxis(- ProjectileSpread / 2.f, FVector::UpVector);
+
+	/*TArray<FVector> Directions = UARPGAbilitySystemLibrary::EvenlyRotatedVectors(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);*/
+	TArray<FRotator> Rotations = UARPGAbilitySystemLibrary::EvenlySpacedRotators(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);
+	for(const FRotator& Rot : Rotations)
+	{
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SocketLocation);
+		SpawnTransform.SetRotation(Rot.Quaternion());
+		
+		AProjectile* Projectile = GetWorld()->SpawnActorDeferred<AProjectile>(
+			 ProjectileClass,
+			 SpawnTransform,
+			 GetOwningActorFromActorInfo(),
+			 Cast<APawn>(GetOwningActorFromActorInfo()),
+			 ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+
+		Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
+		Projectile->FinishSpawning(SpawnTransform);
+	}
+
+	// Debug Code
+	/*for(FVector& Direction : Directions)
+	{
+		UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + Direction * 75.f, 5, FLinearColor::Yellow, 60.f, 1.5f);
+	}
+	for(FRotator& Rot : Rotations)
+	{
+		UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + Rot.Vector() * 75.f, 5, FLinearColor::Yellow, 60.f, 1.5f);
+	}*/
+	
+	/*const FVector LeftOfSpread = Forward.RotateAngleAxis(- ProjectileSpread / 2.f, FVector::UpVector);
 	const FVector RightOfSpread = Forward.RotateAngleAxis(ProjectileSpread / 2.f, FVector::UpVector);
 	//NumProjectiles = FMath::Min(MaxNumProjectiles, GetAbilityLevel());
 	if(NumProjectiles > 1)
@@ -45,7 +77,7 @@ void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const 
 
 	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation +Forward * 100.f, 5, FLinearColor::White, 60.f, 1.5f);
 	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + LeftOfSpread * 100.f, 5, FLinearColor::Blue, 60.f, 1.5f);
-	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + RightOfSpread * 100.f, 5, FLinearColor::Blue, 60.f, 1.5f);
+	UKismetSystemLibrary::DrawDebugArrow(GetAvatarActorFromActorInfo(), SocketLocation, SocketLocation + RightOfSpread * 100.f, 5, FLinearColor::Blue, 60.f, 1.5f);*/
 }
 
 FString UFireBolt::GetDescription(int32 Level)
