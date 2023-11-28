@@ -162,7 +162,7 @@ void UARPGAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 	}
 }
 
-void UARPGAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
+void UARPGAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
 {
 	if(!InputTag.IsValid()) return;
 
@@ -170,7 +170,25 @@ void UARPGAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 	{
 		if(AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
+			AbilitySpecInputPressed(AbilitySpec);
+			if(AbilitySpec.IsActive())
+			{
+				InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
+			}
+		}
+	}
+}
+
+void UARPGAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
+{
+	if(!InputTag.IsValid()) return;
+
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if(AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag) && AbilitySpec.IsActive())
+		{
 			AbilitySpecInputReleased(AbilitySpec);
+			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
 		}
 	}
 }
