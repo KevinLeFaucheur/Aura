@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "CharacterPlayerController.generated.h"
 
+class UNiagaraSystem;
 class UDamageTextComponent;
 class UARPGInputConfig;
 class UInputMappingContext;
@@ -88,4 +89,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USplineComponent> Spline;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> ClickNiagaraSystem;
 };
