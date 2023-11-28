@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/ARPGAbilitySystemLibrary.h"
 #include "Actor/Projectile.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag,
@@ -19,8 +20,10 @@ void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const 
 
 	const FVector Forward = Rotation.Vector();
 
+	const int32 EffectiveNumProjectiles = FMath::Min(MaxNumProjectiles, GetAbilityLevel());
+
 	/*TArray<FVector> Directions = UARPGAbilitySystemLibrary::EvenlyRotatedVectors(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);*/
-	TArray<FRotator> Rotations = UARPGAbilitySystemLibrary::EvenlySpacedRotators(Forward, FVector::UpVector, ProjectileSpread, NumProjectiles);
+	TArray<FRotator> Rotations = UARPGAbilitySystemLibrary::EvenlySpacedRotators(Forward, FVector::UpVector, ProjectileSpread, EffectiveNumProjectiles);
 	for(const FRotator& Rot : Rotations)
 	{
 		FTransform SpawnTransform;
@@ -35,6 +38,20 @@ void UFireBolt::SpawnProjectiles(const FVector& ProjectileTargetLocation, const 
 			 ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		Projectile->DamageEffectParams = MakeDamageEffectParamsFromClassDefaults();
+		
+		if(HomingTarget && HomingTarget->Implements<UCombatInterface>())
+		{
+			Projectile->ProjectileMovement->HomingTargetComponent = HomingTarget->GetRootComponent();
+		}
+		else
+		{
+			Projectile->HomingTargetSceneComponent = NewObject<USceneComponent>(USceneComponent::StaticClass());
+			Projectile->HomingTargetSceneComponent->SetWorldLocation(ProjectileTargetLocation);
+			Projectile->ProjectileMovement->HomingTargetComponent = Projectile->HomingTargetSceneComponent;
+		}
+		Projectile->ProjectileMovement->HomingAccelerationMagnitude = FMath::FRandRange(HomingAccelerationMin, HomingAccelerationMax);
+		Projectile->ProjectileMovement->bIsHomingProjectile = bLaunchHomingProjectiles;
+		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
 
